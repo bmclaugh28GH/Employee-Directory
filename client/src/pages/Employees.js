@@ -8,9 +8,11 @@ import { List, ListItem } from "../components/List";
 import { Input, TextArea, FormBtn } from "../components/Form";
 
 function Employees() {
+
   // Setting our component's initial state
   const [employees, setEmployees] = useState([])
   const [formObject, setFormObject] = useState({})
+  const [filterFormObject, setFilterFormObject] = useState({})
 
   // Load all books and store them with setBooks
   useEffect(() => {
@@ -34,6 +36,13 @@ function Employees() {
   }
 
   // Handles updating component state when the user types into the input field
+  function handleFSInputChange(event) {
+    const { name, value } = event.target;
+    console.log ('name ' + name + ' value ' + value); 
+    setFilterFormObject({...filterFormObject, [name]: value})
+  };
+
+  // Handles updating component state when the user types into the input field
   function handleInputChange(event) {
     const { name, value } = event.target;
     setFormObject({...formObject, [name]: value})
@@ -43,7 +52,7 @@ function Employees() {
   // Then reload books from the database
   function handleFormSubmit(event) {
     event.preventDefault();
-    if (formObject.title && formObject.author) {
+    if (formObject.fname && formObject.lname) {
       API.saveEmployee({
         fname: formObject.fname,
         lname: formObject.lname,
@@ -51,7 +60,9 @@ function Employees() {
         second_language: formObject.second_language,
         dependents: formObject.dependents
       })
-        .then(res => loadEmployees())
+        .then(res => {
+          loadEmployees();
+        })
         .catch(err => console.log(err));
     }
   };
@@ -59,9 +70,9 @@ function Employees() {
     return (
       <Container fluid>
         <Row>
-          <Col size="md-6">
+          <Col size="md-4">
             <Jumbotron>
-              <h1>Employee Entry</h1>
+              <h3>Employee Entry</h3>
             </Jumbotron>
             <form>
               <Input
@@ -85,24 +96,67 @@ function Employees() {
                 placeholder="# of Dependents (Required)"
               />
               <FormBtn
-                disabled={!(formObject.author && formObject.title)}
+                disabled={!(formObject.fname && formObject.lname)}
                 onClick={handleFormSubmit}
               >
                 Submit
               </FormBtn>
             </form>
           </Col>
-          <Col size="md-6 sm-12">
+
+          <Col size="md-8 sm-12">
             <Jumbotron>
-              <h1>Employees</h1>
+              <h3>Employees</h3>
             </Jumbotron>
+            <form>
+              <h6>Filter</h6>
+              <div className="radio">
+                <label>
+                  <input onChange={handleFSInputChange} type="radio" value="filter1" checked={false}/>
+                    First Name
+                </label>
+                 
+                <label>
+                  <input onChange={handleFSInputChange} type="radio" value="filter2" checked={false} />
+                    Last Name
+                </label>
+                <label>
+                  <input onChange={handleFSInputChange} type="radio" value="filter3" checked={false} />
+                    Position
+                </label>
+              </div>
+              <h6>Sort</h6>
+              <div className="radio">
+                <label>
+                  <input onChange={handleFSInputChange} type="radio" value="sort1" checked={false}/>
+                    First Name
+                </label>
+                 
+                <label>
+                  <input onChange={handleFSInputChange} type="radio" value="sort2" checked={false} />
+                    Last Name
+                </label>
+                <label>
+                  <input onChange={handleFSInputChange} type="radio" value="sort3" checked={false} />
+                    Position
+                </label>
+              </div>
+              <p>{filterFormObject.filter_fname}</p>
+              <Input
+                onChange={handleFSInputChange}
+                name="filter_fname"
+                placeholder="Filter"
+              />
+            </form>
+
+            <hr></hr>
             {employees.length ? (
               <List>
                 {employees.map(employee => (
                   <ListItem key={employee._id}>
                     <Link to={"/employees/" + employee._id}>
                       <strong>
-                        {employee.fname}
+                        {employee.fname} {employee.lname}, {employee.position}
                       </strong>
                     </Link>
                     <DeleteBtn onClick={() => deleteEmployee(employee._id)} />

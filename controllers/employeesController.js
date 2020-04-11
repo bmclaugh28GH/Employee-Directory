@@ -5,7 +5,8 @@ module.exports = {
   findAll: function(req, res) {
     db.Employee
       .find(req.query)
-      .sort({ date_hired: -1 })
+      //.find({fname:"Brian"})
+      .sort({ fname: 1 })
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },
