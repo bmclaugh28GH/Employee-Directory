@@ -12,14 +12,26 @@ function Employees() {
   // Setting our component's initial state
   const [employees, setEmployees] = useState([])
   const [formObject, setFormObject] = useState({})
-  const [filterFormObject, setFilterFormObject] = useState({})
+  const [filterFormObject, setFilterFormObject] = useState({
+    filter_criteria:""
+  })
+  const [filterRadioButtons, setFilterRadioButtons]=useState ({
+    filter1:false,
+    filter2:false,
+    filter3:false
+  })
+  const [sortRadioButtons, setSortRadioButtons]=useState ({
+    sort1:false,
+    sort2:false,
+    sort3:false
+  })
 
   // Load all books and store them with setBooks
   useEffect(() => {
     loadEmployees()
   }, [])
 
-  // Loads all books and sets them to books
+  // Loads all employees
   function loadEmployees() {
     API.getEmployees()
       .then(res => 
@@ -28,7 +40,7 @@ function Employees() {
       .catch(err => console.log(err));
   };
 
-  // Deletes a book from the database with a given id, then reloads books from the db
+  // Deletes a employee from the database with a given id, then reloads employees from the db
   function deleteEmployee(id) {
     API.deleteEmployee(id)
       .then(res => loadEmployees())
@@ -38,8 +50,40 @@ function Employees() {
   // Handles updating component state when the user types into the input field
   function handleFSInputChange(event) {
     const { name, value } = event.target;
-    console.log ('name ' + name + ' value ' + value); 
-    setFilterFormObject({...filterFormObject, [name]: value})
+    if (name == "filter_criteria"){
+      console.log ('name ' + name + ' value ' + value); 
+      setFilterFormObject({...filterFormObject, [name]: value})
+    }; 
+    if (name == 'filter1' 
+      || name == 'filter2' 
+      || name == 'filter3'){
+      console.log(name); 
+      if (!filterFormObject.filter_criteria){
+        return;
+      } else {
+        console.log ('filter ' + name + ' by ' + filterFormObject.filter_criteria);
+
+        var filterEmployees;  
+        if (name == 'filter1'){
+          filterEmployees = employees.filter(employee => employee.fname == filterFormObject.filter_criteria); 
+          console.log (filterEmployees); 
+        } else if (name == 'filter2'){
+          filterEmployees = employees.filter(employee => employee.lname == filterFormObject.filter_criteria); 
+          console.log (filterEmployees); 
+        } else if (name == 'filter3'){
+          filterEmployees = employees.filter(employee => employee.position == filterFormObject.filter_criteria); 
+          console.log (filterEmployees); 
+        }
+
+      }
+      setFilterRadioButtons ({[name]:value});
+      } 
+    if (name == 'sort1' 
+      || name == 'sort2' 
+      || name == 'sort3'){
+      console.log(name); 
+      setSortRadioButtons ({[name]:value});
+    }; 
   };
 
   // Handles updating component state when the user types into the input field
@@ -48,7 +92,7 @@ function Employees() {
     setFormObject({...formObject, [name]: value})
   };
 
-  // When the form is submitted, use the API.saveBook method to save the book data
+  // When the form is submitted, use the API.saveEmployee method to save the employee data
   // Then reload books from the database
   function handleFormSubmit(event) {
     event.preventDefault();
@@ -112,39 +156,69 @@ function Employees() {
               <h6>Filter</h6>
               <div className="radio">
                 <label>
-                  <input onChange={handleFSInputChange} type="radio" value="filter1" checked={false}/>
+                  <input 
+                    onChange={handleFSInputChange} 
+                    type="radio" 
+                    name="filter1" 
+                    value="filter1" 
+                    checked={filterRadioButtons.filter1} />
                     First Name
                 </label>
                  
                 <label>
-                  <input onChange={handleFSInputChange} type="radio" value="filter2" checked={false} />
+                  <input 
+                    onChange={handleFSInputChange} 
+                    type="radio" 
+                    name="filter2" 
+                    value="filter2"
+                    checked={filterRadioButtons.filter2} />
                     Last Name
                 </label>
                 <label>
-                  <input onChange={handleFSInputChange} type="radio" value="filter3" checked={false} />
+                  <input 
+                    onChange={handleFSInputChange} 
+                    type="radio" 
+                    name="filter3" 
+                    value="filter3"
+                    checked={filterRadioButtons.filter3} />
                     Position
                 </label>
               </div>
               <h6>Sort</h6>
               <div className="radio">
                 <label>
-                  <input onChange={handleFSInputChange} type="radio" value="sort1" checked={false}/>
+                  <input 
+                    onChange={handleFSInputChange} 
+                    type="radio" 
+                    name="sort1" 
+                    value="sort1"
+                    checked={sortRadioButtons.sort1} />
                     First Name
                 </label>
                  
                 <label>
-                  <input onChange={handleFSInputChange} type="radio" value="sort2" checked={false} />
+                  <input 
+                    onChange={handleFSInputChange} 
+                    type="radio" 
+                    name="sort2" 
+                    value="sort2"
+                    checked={sortRadioButtons.sort2} />
                     Last Name
                 </label>
                 <label>
-                  <input onChange={handleFSInputChange} type="radio" value="sort3" checked={false} />
+                  <input 
+                    onChange={handleFSInputChange} 
+                    type="radio" 
+                    name="sort3" 
+                    value="sort3"
+                    checked={sortRadioButtons.sort3} />
                     Position
                 </label>
               </div>
-              <p>{filterFormObject.filter_fname}</p>
+              <p>{filterFormObject.filter_criteria}</p>
               <Input
                 onChange={handleFSInputChange}
-                name="filter_fname"
+                name="filter_criteria"
                 placeholder="Filter"
               />
             </form>
