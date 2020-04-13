@@ -40,7 +40,55 @@ const employeeSeed = [
     second_language: "Spanish", 
     date_hired: new Date (2004, 04, 07), 
     dependents: 0
-  }
+  }, 
+  {
+    fname: "Pete",
+    lname: "Smith",
+    position: "Consultant",
+    second_language: "", 
+    date_hired: new Date (2004, 04, 07), 
+    dependents: 0
+  }, 
+  {
+    fname: "Pete",
+    lname: "Spock",
+    position: "Consultant",
+    second_language: "", 
+    date_hired: new Date (2004, 04, 07), 
+    dependents: 0
+  }, 
+  {
+    fname: "Bill",
+    lname: "Shatner",
+    position: "Consultant",
+    second_language: "", 
+    date_hired: new Date (2004, 04, 07), 
+    dependents: 0
+  }, 
+  {
+    fname: "Jean Luc",
+    lname: "Picard",
+    position: "Developer",
+    second_language: "", 
+    date_hired: new Date (2004, 04, 07), 
+    dependents: 0
+  }, 
+  {
+    fname: "Pika",
+    lname: "Chu",
+    position: "Manager",
+    second_language: "", 
+    date_hired: new Date (2004, 04, 07), 
+    dependents: 0
+  }, 
+  {
+    fname: "Doak",
+    lname: "Bonce",
+    position: "Consultant",
+    second_language: "Greek", 
+    date_hired: new Date (2004, 04, 07), 
+    dependents: 0
+  }, 
 ];
 
 db.Employee
