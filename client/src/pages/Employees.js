@@ -259,7 +259,6 @@ function Employees() {
                     Position
                 </label>
               </div>
-              <p>{filterFormObject.filter_criteria}</p>
               <Input
                 onChange={handleFSInputChange}
                 name="filter_criteria"
