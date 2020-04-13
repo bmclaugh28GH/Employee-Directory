@@ -58,6 +58,7 @@ function Employees() {
       || name == 'filter2' 
       || name == 'filter3'){
       console.log(name); 
+      //loadEmployees();
       if (!filterFormObject.filter_criteria){
         return;
       } else {
@@ -74,6 +75,7 @@ function Employees() {
           filterEmployees = employees.filter(employee => employee.position == filterFormObject.filter_criteria); 
           console.log (filterEmployees); 
         }
+        setEmployees (filterEmployees); 
 
       }
       setFilterRadioButtons ({[name]:value});
@@ -82,6 +84,38 @@ function Employees() {
       || name == 'sort2' 
       || name == 'sort3'){
       console.log(name); 
+
+      var sortEmployees;  
+      if (name == 'sort1'){
+        sortEmployees = employees.sort((a, b) => {
+          if (a.fname < b.fname) {
+            return -1;
+          } else {
+            return 1;
+          }
+        });
+        console.log (sortEmployees); 
+      }
+      if (name == 'sort2'){
+        sortEmployees = employees.sort((a, b) => {
+          if (a.lname < b.lname) {
+            return -1;
+          } else {
+            return 1;
+          }
+        });
+        console.log (sortEmployees); 
+      }
+      if (name == 'sort3'){
+        sortEmployees = employees.sort((a, b) => {
+          if (a.position < b.position) {
+            return -1;
+          } else {
+            return 1;
+          }
+        });
+        console.log (sortEmployees); 
+      }
       setSortRadioButtons ({[name]:value});
     }; 
   };
@@ -91,6 +125,11 @@ function Employees() {
     const { name, value } = event.target;
     setFormObject({...formObject, [name]: value})
   };
+
+  function handleFilterReset(event) {
+    event.preventDefault();
+    loadEmployees();
+  }
 
   // When the form is submitted, use the API.saveEmployee method to save the employee data
   // Then reload books from the database
@@ -184,6 +223,11 @@ function Employees() {
                     Position
                 </label>
               </div>
+              <FormBtn
+                onClick={handleFilterReset} >
+                Undo Filter
+              </FormBtn>
+
               <h6>Sort</h6>
               <div className="radio">
                 <label>
